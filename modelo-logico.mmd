@@ -1,0 +1,131 @@
+erDiagram
+    PERSONA ||--o{ PARTICIPACION : tiene
+    EDICION ||--o{ PARTICIPACION : contiene
+    PARTICIPACION ||--o| ASISTENTE : subtipo
+    PARTICIPACION ||--o| PONENTE : subtipo
+
+    SEDE ||--o{ SALA : contiene
+    EDICION ||--o{ SESION : contiene
+    SALA o|--o{ SESION : aloja
+
+    SESION ||--o| CHARLA : subtipo
+    SESION ||--o| TALLER : subtipo
+    SESION ||--o| TRANSMISION : incluye
+
+    PARTICIPACION ||--o{ INSCRIPCION : registra
+    SESION ||--o{ INSCRIPCION : recibe
+    PARTICIPACION ||--o{ ASIGNACION_PONENTE : asigna
+    SESION ||--o{ ASIGNACION_PONENTE : recibe
+
+    EMPRESA ||--o{ ACUERDO_PATROCINIO : firma
+    EDICION ||--o{ ACUERDO_PATROCINIO : recibe
+    SESION ||--o{ PREREQUISITO : requiere
+    SESION ||--o{ PREREQUISITO : tiene
+    PERSONA {
+        INTEGER persona_id PK
+        VARCHAR nombre
+        VARCHAR correo UK
+        VARCHAR pais
+    }
+
+    EDICION {
+        INTEGER edicion_id PK
+        VARCHAR nombre
+        SMALLINT anio
+        DATE fecha_inicio
+        DATE fecha_fin
+        estado_edicion estado
+        modalidad_edicion modalidad
+    }
+
+    SEDE {
+        INTEGER sede_id PK
+        VARCHAR nombre
+        VARCHAR ciudad
+    }
+
+    SALA {
+        INTEGER sala_id PK
+        INTEGER sede_id FK
+        VARCHAR nombre
+        INTEGER capacidad
+    }
+
+    PARTICIPACION {
+        INTEGER participacion_id PK
+        INTEGER persona_id FK
+        INTEGER edicion_id FK
+    }
+
+    ASISTENTE {
+        INTEGER participacion_id PK, FK
+        tipo_acreditacion tipo_acreditacion
+    }
+
+    PONENTE {
+        INTEGER participacion_id PK, FK
+        TEXT biografia
+    }
+
+    SESION {
+        INTEGER sesion_id PK
+        INTEGER edicion_id FK
+        INTEGER sala_id FK
+        VARCHAR titulo
+        TEXT resumen
+        DATE fecha
+        TIME hora_inicio
+        TIME hora_fin
+        tipo_sesion tipo_sesion
+    }
+
+    CHARLA {
+        INTEGER sesion_id PK, FK
+        INTEGER minutos_preguntas
+    }
+
+    TALLER {
+        INTEGER sesion_id PK, FK
+        INTEGER cupo_practico
+        TEXT requisitos_materiales
+    }
+
+    TRANSMISION {
+        INTEGER sesion_id PK, FK
+        VARCHAR plataforma
+        VARCHAR url
+        VARCHAR codigo_acceso
+    }
+
+    INSCRIPCION {
+        INTEGER participacion_id PK, FK
+        INTEGER sesion_id PK, FK
+        DATE fecha_inscripcion
+        estado_inscripcion estado
+        BOOLEAN asistio
+    }
+
+    ASIGNACION_PONENTE {
+        INTEGER participacion_id PK, FK
+        INTEGER sesion_id PK, FK
+        rol_ponente rol
+        INTEGER orden_programa
+    }
+
+    EMPRESA {
+        INTEGER empresa_id PK
+        VARCHAR nombre UK
+    }
+
+    ACUERDO_PATROCINIO {
+        INTEGER empresa_id PK, FK
+        INTEGER edicion_id PK, FK
+        categoria_patrocinio categoria
+        NUMERIC monto
+        DATE fecha_confirmacion
+    }
+
+    PREREQUISITO {
+        INTEGER sesion_id PK, FK
+        INTEGER sesion_previa_id PK, FK
+    }

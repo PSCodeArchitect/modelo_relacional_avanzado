@@ -1,0 +1,120 @@
+erDiagram
+    direction LR
+
+    PERSONA {
+        string nombre
+        string correo UK
+        string pais
+    }
+
+    EDICION {
+        int id_edicion PK
+        string nombre
+        int anio
+        string fechas
+        string estado
+        string modalidad
+    }
+
+    SEDE {
+        int id_sede PK
+        string nombre
+        string ciudad
+    }
+
+    SALA {
+        int id_sala PK
+        string nombre
+        int capacidad
+    }
+
+    PARTICIPACION {
+        int id_participacion PK
+    }
+
+    ASISTENTE {
+        string tipo_acreditacion
+    }
+
+    PONENTE {
+        string biografia
+    }
+
+    SESION {
+        int id_sesion PK
+        string titulo
+        string resumen
+        string fecha
+        string hora_inicio
+        string hora_fin
+        string tipo
+    }
+
+    CHARLA {
+        int minutos_preguntas
+    }
+
+    TALLER {
+        int cupo_practico
+        string requisitos_materiales
+    }
+
+    TRANSMISION {
+        string plataforma
+        string url
+        string codigo_acceso
+    }
+
+    INSCRIPCION {
+        string fecha
+        string estado
+        boolean asistencia
+    }
+
+    ASIGNACION_PONENTE {
+        string rol
+        int orden
+    }
+
+    EMPRESA {
+        int id_empresa PK
+        string nombre
+    }
+
+    ACUERDO_PATROCINIO {
+        int id_acuerdo PK
+        string categoria
+        decimal monto
+        string fecha_confirmacion
+    }
+
+    PREREQUISITO {
+        int id_prerequisito PK
+        string descripcion
+    }
+
+    PERSONA ||--o{ PARTICIPACION : participa
+    EDICION ||--o{ PARTICIPACION : contiene
+
+    PARTICIPACION ||--o| ASISTENTE : tiene
+    PARTICIPACION ||--o| PONENTE : tiene
+
+    EDICION ||--o{ SESION : programa
+    SEDE ||--o{ SALA : contiene
+    SALA ||--o{ SESION : aloja
+
+    SESION ||--o| CHARLA : es
+    SESION ||--o| TALLER : es
+    SESION ||--o| TRANSMISION : transmite
+
+    PARTICIPACION ||--o{ INSCRIPCION : realiza
+    SESION ||--o{ INSCRIPCION : recibe
+
+    PARTICIPACION ||--o{ ASIGNACION_PONENTE : interviene
+    SESION ||--o{ ASIGNACION_PONENTE : tiene
+
+    EMPRESA ||--o{ ACUERDO_PATROCINIO : firma
+    EDICION ||--o{ ACUERDO_PATROCINIO : recibe
+
+    SESION ||--o{ PREREQUISITO : requiere
+    SESION ||--o{ PREREQUISITO : precede
